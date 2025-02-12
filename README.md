@@ -2,7 +2,7 @@
 
 Made by Daniel Beckemeier, DO8YDP
 
-Retrieves Wavelog data via API and displays the QSO numbers per QSO type via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID can be configured in the admin area of Wordpress. Example site: https://do8ydp.de:
+Retrieves Wavelog data via API and displays the QSO numbers per operating mode via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID can be configured in the admin area of Wordpress. Example site: https://do8ydp.de:
 
 <img width="1004" alt="Bildschirmfoto 2025-02-12 um 10 45 54" src="https://github.com/user-attachments/assets/df1ac1e0-c673-48e1-9b4b-ecc98a380ae1" />
 
