@@ -4,7 +4,7 @@ Made by Daniel Beckemeier, DO8YDP
 
 Retrieves Wavelog data via API and displays the QSO numbers per operating mode via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID can be configured in the admin area of Wordpress. Example site: https://do8ydp.de:
 
-<img width="1004" alt="Bildschirmfoto 2025-02-12 um 10 45 54" src="https://github.com/user-attachments/assets/df1ac1e0-c673-48e1-9b4b-ecc98a380ae1" />
+<img width="1158" alt="Bildschirmfoto 2025-02-12 um 15 19 52" src="https://github.com/user-attachments/assets/a9fdffc9-c294-407e-bda1-6bd79f546676" />
 
 Attention: This plugin uses static 10 minutes caching time to reduce API calls to the Wavelog instance. So allthough this is nearly real-time, there can be a delay of up to ten minutes.
 
@@ -38,7 +38,14 @@ Installation:
 
 Tips and hints:
 
-I use TablePress to create nice looking tables to use the shortcodes in.
+You can use TablePress to create nice looking tables to use the shortcodes in, like in this example:
+<img width="1004" alt="Bildschirmfoto 2025-02-12 um 10 45 54" src="https://github.com/user-attachments/assets/df1ac1e0-c673-48e1-9b4b-ecc98a380ae1" />
+
+
+You can also use a block, with groups inside to achieve something like this:
+<img width="1158" alt="Bildschirmfoto 2025-02-12 um 15 19 52" src="https://github.com/user-attachments/assets/a9fdffc9-c294-407e-bda1-6bd79f546676" />
+
+
 
 
 
