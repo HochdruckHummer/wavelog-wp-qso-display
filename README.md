@@ -2,13 +2,11 @@
 
 Made by Daniel Beckemeier, DO8YDP
 
-Retrieves Wavelog data via API and displays the QSO numbers per QSO type via shortcodes. The Wavelog URL, the API key and the station ID can be configured in the admin area. Example site: https://do8ydp.de:
+Retrieves Wavelog data via API and displays the QSO numbers per QSO type via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID can be configured in the admin area of Wordpress. Example site: https://do8ydp.de:
 
 <img width="1004" alt="Bildschirmfoto 2025-02-12 um 10 45 54" src="https://github.com/user-attachments/assets/df1ac1e0-c673-48e1-9b4b-ecc98a380ae1" />
 
-
-
-This plugin uses static 10 minutes caching time to reduce API calls to the Wavelog instance. So allthough this is nearly real-time, there can be a delay of up to ten minutes.
+Attention: This plugin uses static 10 minutes caching time to reduce API calls to the Wavelog instance. So allthough this is nearly real-time, there can be a delay of up to ten minutes.
 
 
 Installation:
@@ -35,8 +33,6 @@ Installation:
 [wavelog_rttyqso]
 [wavelog_pskqso]
 [wavelog_js8qso]
-
-
 
 
 
