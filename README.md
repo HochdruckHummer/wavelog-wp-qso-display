@@ -9,7 +9,7 @@ Retrieves Wavelog data via API and displays the QSO numbers per operating mode v
 Attention: This plugin uses static 10 minutes caching time to reduce API calls to the Wavelog instance. So allthough this is nearly real-time, there can be a delay of up to ten minutes.
 
 
-Installation:
+##Installation:
 
 1. Just install the Zip-file as a plugin in your wordpress instance and activate the plugin.
 2. Go to Settings-Menu in Wordpress and click on "Wavelog":
@@ -36,7 +36,7 @@ Installation:
 
 
 
-Tips and hints:
+##Tips and hints:
 
 You can use TablePress to create nice looking tables to use the shortcodes in, like in this example:
 <img width="1004" alt="Bildschirmfoto 2025-02-12 um 10 45 54" src="https://github.com/user-attachments/assets/df1ac1e0-c673-48e1-9b4b-ecc98a380ae1" />
