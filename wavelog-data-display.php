@@ -90,6 +90,8 @@ function wavelog_settings_page() {
             <li><strong>[wavelog_cwqso]</strong> - Displays the total number of CW QSOs.</li>
             <li><strong>[wavelog_js8qso]</strong> - Displays the total number of JS8 QSOs.</li>
             <li><strong>[wavelog_digiqso]</strong> - Displays the total number of Digimode QSOs (FT8, FT4, PSK, RTTY, JS8, etc.).</li>
+            <li><strong>[wavelog_totalqso_year]</strong> - Displays the total number of QSOs for the current year.</li>
+
         </ul>
     </div>
     <?php
