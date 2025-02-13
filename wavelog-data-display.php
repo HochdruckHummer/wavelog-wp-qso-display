@@ -19,6 +19,7 @@ function wavelog_register_settings() {
     register_setting( 'wavelog_settings_group', 'wavelog_url' );
     register_setting( 'wavelog_settings_group', 'wavelog_api_key' );
     register_setting( 'wavelog_settings_group', 'wavelog_station_id' );
+    register_setting( 'wavelog_settings_group', 'wavelog_cache_minutes' );
 }
 add_action( 'admin_init', 'wavelog_register_settings' );
 
@@ -62,9 +63,34 @@ function wavelog_settings_page() {
                         <input type="text" name="wavelog_station_id" value="<?php echo esc_attr( get_option( 'wavelog_station_id' ) ); ?>" style="width: 200px;" />
                     </td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Cache Duration (minutes)</th>
+                    <td>
+                        <input type="number" name="wavelog_cache_minutes" min="1" max="1440"
+                        value="<?php echo esc_attr( get_option( 'wavelog_cache_minutes', '10' ) ); ?>"
+                        style="width: 80px;" />
+                          <br /><small>Enter a value from 1 to 1440 minutes (default: 10 minutes).</small>
+                    </td>
+                </tr>
             </table>
             <?php submit_button(); ?>
         </form>
+        <h2>Available Shortcodes</h2>
+        <p>You can use the following shortcodes to display QSO statistics on your pages or posts:</p>
+        <ul>
+            <li><strong>[wavelog_totalqso]</strong> - Displays the total number of all QSOs.</li>
+            <li><strong>[wavelog_ssbqso]</strong> - Displays the total number of SSB QSOs.</li>
+            <li><strong>[wavelog_fmqso]</strong> - Displays the total number of FM QSOs.</li>
+            <li><strong>[wavelog_amqso]</strong> - Displays the total number of AM QSOs.</li>
+            <li><strong>[wavelog_rttyqso]</strong> - Displays the total number of RTTY QSOs.</li>
+            <li><strong>[wavelog_ft4qso]</strong> - Displays the total number of FT4 QSOs.</li>
+            <li><strong>[wavelog_ft8qso]</strong> - Displays the total number of FT8 QSOs.</li>
+            <li><strong>[wavelog_ft8ft4qso]</strong> - Displays the total number of FT8 and FT4 QSOs summed up.</li>
+            <li><strong>[wavelog_pskqso]</strong> - Displays the total number of PSK QSOs.</li>
+            <li><strong>[wavelog_cwqso]</strong> - Displays the total number of CW QSOs.</li>
+            <li><strong>[wavelog_js8qso]</strong> - Displays the total number of JS8 QSOs.</li>
+            <li><strong>[wavelog_digiqso]</strong> - Displays the total number of Digimode QSOs (FT8, FT4, PSK, RTTY, JS8, etc.).</li>
+        </ul>
     </div>
     <?php
 }
@@ -83,17 +109,26 @@ function wavelog_get_data() {
     $wavelog_url    = get_option( 'wavelog_url' );
     $api_key        = get_option( 'wavelog_api_key' );
     $station_id     = get_option( 'wavelog_station_id' );
+    $cache_minutes  = get_option( 'wavelog_cache_minutes', 10 ); // default to 10 if not set
 
     if ( empty( $wavelog_url ) || empty( $api_key ) || empty( $station_id ) ) {
         return 'Please configure the Wavelog settings in the admin area.';
     }
 
-    // Results for 10 minutes caching
+    // Validate the cache minutes (ensure it's between 1 and 1440)
+   $cache_minutes = intval( $cache_minutes );
+   if ( $cache_minutes < 1 || $cache_minutes > 1440 ) {
+       $cache_minutes = 10;
+   }
+
+   // Results for caching
     $transient_key = 'wavelog_data_cache';
     $cached_data = get_transient( $transient_key );
     if ( $cached_data !== false ) {
         return $cached_data;
     }
+
+
 
     // Request body structure
     $body = array(
@@ -202,7 +237,7 @@ function wavelog_get_data() {
     );
 
     // Cache result for 10 minutes
-    set_transient( $transient_key, $result, 10 * MINUTE_IN_SECONDS );
+    set_transient( $transient_key, $result, $cache_minutes * MINUTE_IN_SECONDS );
 
     return $result; 
 }
@@ -251,6 +286,19 @@ function wavelog_fmqso_shortcode() {
 add_shortcode( 'wavelog_fmqso', 'wavelog_fmqso_shortcode' );
 
 /**
+ * Returns the total number of AM-QSO.
+ * Shortcode: [wavelog_amqso]
+ */
+function wavelog_amqso_shortcode() {
+    $data = wavelog_get_data();
+    if ( is_string( $data ) ) {
+        return esc_html( $data );
+    }
+    return intval( $data['am_qso'] );
+}
+add_shortcode( 'wavelog_amqso', 'wavelog_amqso_shortcode' );
+
+/**
  * Returns the total number of RTTY-QSOs zurück.
  * Shortcode: [wavelog_rttyqso]
  */
@@ -264,7 +312,33 @@ function wavelog_rttyqso_shortcode() {
 add_shortcode( 'wavelog_rttyqso', 'wavelog_rttyqso_shortcode' );
 
 /**
- * GReturns the total number of FT8 and FT4 QSOs summed up.
+ * Returns the total number of FT4-QSOs zurück.
+ * Shortcode: [wavelog_ft4qso]
+ */
+function wavelog_ft4qso_shortcode() {
+    $data = wavelog_get_data();
+    if ( is_string( $data ) ) {
+        return esc_html( $data );
+    }
+    return intval( $data['ft4_qso'] );
+}
+add_shortcode( 'wavelog_ft4qso', 'wavelog_ft4qso_shortcode' );
+
+/**
+ * Returns the total number of FT8-QSOs zurück.
+ * Shortcode: [wavelog_ft8qso]
+ */
+function wavelog_ft8qso_shortcode() {
+    $data = wavelog_get_data();
+    if ( is_string( $data ) ) {
+        return esc_html( $data );
+    }
+    return intval( $data['ft8_qso'] );
+}
+add_shortcode( 'wavelog_ft8qso', 'wavelog_ft8qso_shortcode' );
+
+/**
+ * Returns the total number of FT8 and FT4 QSOs summed up.
  * Shortcode: [wavelog_ft8ft4qso]
  */
 function wavelog_ft8ft4qso_shortcode() {
