@@ -147,12 +147,8 @@ function wavelog_get_data() {
         'timeout' => 15
     );
 
-    // Old API call for accessing all ADIF data.  (pay attention to the trailing slash, if required)
-    $response = wp_remote_post( trailingslashit( $wavelog_url ) . 'index.php/api/get_contacts_adif', $args );
-
-    // Future API call for accessing QSO totals directly from Wavelogs new, dedicated WordPress API.  (pay attention to the trailing slash, if required)
-   // $response = wp_remote_post( trailingslashit( $wavelog_url ) . 'index.php/api/get_wp_stats', $args );
-
+    // API call (pay attention to the trailing slash, if required)
+    $response = wp_remote_post( trailingslashit( $wavelog_url ) . 'index.php/api/get_wp_stats', $args );
 
     if ( is_wp_error( $response ) ) {
         return "Error in the API query: " . $response->get_error_message();
@@ -161,84 +157,89 @@ function wavelog_get_data() {
     $response_body = wp_remote_retrieve_body( $response );
     $data = json_decode( $response_body, true );
 
-    if ( ! isset( $data['adif'] ) ) {
-        return "Error: No ADIF data received.";
+    if ($data['status'] != "successful" ) {
+        return "Error: Something went wrong with fetching data.";
     }
 
     $adif_data = $data['adif'];
 
-    // Total number of all QSOs (counting the <CALL: tag)
-    preg_match_all( '/<CALL:/', $adif_data, $total_matches );
-    $total_qso = count( $total_matches[0] );
+    // Total number of all QSOs
+    $total_qso = $data['statistics']['totalalltime'][0]['count'];
 
-    // Count SSB-QSOs
-    preg_match_all( '/<MODE:\d+>SSB/', $adif_data, $ssb_matches );
-    $ssb_qso = count( $ssb_matches[0] );
+    // This years number of QSOs
+    $total_qso_year = $data['statistics']['totalthisyear'][0]['count'];
 
-    // Count FM-QSOs
-    preg_match_all( '/<MODE:\d+>FM/', $adif_data, $fm_matches );
-    $fm_qso = count( $fm_matches[0] );
-
-    // Count AM-QSOs
-    preg_match_all( '/<MODE:\d+>AM/', $adif_data, $am_matches );
-    $am_qso = count( $am_matches[0] );
-
-    // Count RTTY-QSOs
-    preg_match_all( '/<MODE:\d+>RTTY/', $adif_data, $rtty_matches );
-    $rtty_qso = count( $rtty_matches[0] );
-
-    // Count FT4-QSOs
-    preg_match_all( '/<MODE:\d+>FT4/', $adif_data, $ft4_matches );
-    $ft4_qso = count( $ft4_matches[0] );
-
-    // Count FT8-QSOs
-    preg_match_all( '/<MODE:\d+>FT8/', $adif_data, $ft8_matches );
-    $ft8_qso = count( $ft8_matches[0] );
-
-    // Count FT8 and FT4 QSOs summed up
-    preg_match_all( '/<MODE:\d+>FT8/', $adif_data, $ft8_matches );
-    preg_match_all( '/<MODE:\d+>FT4/', $adif_data, $ft4_matches );
-    $ft8ft4_qso = count( $ft8_matches[0] ) + count( $ft4_matches[0] );
-
-    // Count PSK-QSOs
-    preg_match_all( '/<MODE:\d+>PSK/', $adif_data, $psk_matches );
-    $psk_qso = count( $psk_matches[0] );
-
-    // Count CW-QSOs
-    preg_match_all( '/<MODE:\d+>CW/', $adif_data, $cw_matches );
-    $cw_qso = count( $cw_matches[0] );
-
-    // Count JS8-QSOs
-    preg_match_all( '/<MODE:\d+>JS8/', $adif_data, $js8_matches );
-    $js8_qso = count( $js8_matches[0] );
-
-    // Count all Digimode-QSOs (digital Modes: FT8, FT4, PSK, RTTY, JS8, JT65, JT9, OLIVIA, CONTESTI, ROS)
-    $digi_modes = array( "FT8", "FT4", "PSK", "RTTY", "JS8", "JT65", "JT9", "OLIVIA", "CONTESTI", "ROS" );
+    $digi_modes = array("FT8", "FT4", "PSK", "RTTY", "JS8", "JT65", "JT9", "OLIVIA", "CONTESTI", "ROS");
+    
     $digi_qso = 0;
-    foreach ( $digi_modes as $mode ) {
-        preg_match_all( '/<MODE:\d+>' . preg_quote( $mode, '/' ) . '/', $adif_data, $matches );
-        $digi_qso += count( $matches[0] );
+    $ft8ft4_qso = 0;
+    $ssb_qso = 0;
+    $cw_qso = 0;
+    $fm_qso = 0;
+    $rtty_qso = 0;
+    $js8_qso = 0;
+    $psk_qso = 0;   
+    
+    if (isset($data['statistics']['totalgroupedmodes'])) {
+        foreach ($data  ['statistics']['totalgroupedmodes'] as $mode) {
+            $col_mode = $mode['col_mode'];
+            $col_submode = $mode['col_submode'] ?? '';
+    
+            if ($col_mode === 'SSB') {
+                $ssb_qso = $mode['count'];
+            } elseif ($col_mode === 'CW') {
+                $cw_qso = $mode['count'];
+            } elseif ($col_mode === 'FM') {
+                $fm_qso = $mode['count'];
+            } elseif ($col_mode === 'RTTY') {
+                $rtty_qso = $mode['count'];
+            }
+    
+            // FT8/FT4 combined
+            if ($col_mode === 'FT8' || $col_submode === 'FT4') {
+                $ft8ft4_qso += $mode['count'];
+            }
+    
+            // JS8 mode
+            if (stripos($col_mode, 'JS8') === 0) {
+                $js8_qso = $mode['count'];
+            }
+
+            // PSK mode
+            if (stripos($col_mode, 'PSK') === 0) {
+                $psk_qso = $mode['count'];
+            }
+            
+            // Digital modes total
+            foreach ($digi_modes as $digi_mode) {
+                if (
+                    stripos($col_mode, $digi_mode) === 0 || 
+                    stripos($col_submode, $digi_mode) === 0
+                ) {
+                    $digi_qso += $mode['count'];
+                    break; // Count once per record
+                }
+            }
+        }
     }
 
     $result = array(
-        'total_qso'   => $total_qso,
-        'ssb_qso'     => $ssb_qso,
-        'fm_qso'      => $fm_qso,
-        'am_qso'      => $am_qso,
-        'rtty_qso'    => $rtty_qso,
-        'ft8_qso'     => $ft8_qso,
-        'ft4_qso'     => $ft4_qso,
-        'ft8ft4_qso'  => $ft8ft4_qso,
-        'psk_qso'     => $psk_qso,
-        'cw_qso'      => $cw_qso,
-        'js8_qso'     => $js8_qso,
-        'digi_qso'    => $digi_qso,
+        'total_qso_year'=> $total_qso_year,
+        'total_qso'     => $total_qso,
+        'ssb_qso'       => $ssb_qso,
+        'fm_qso'        => $fm_qso,
+        'rtty_qso'      => $rtty_qso,
+        'ft8ft4_qso'    => $ft8ft4_qso,
+        'psk_qso'       => $psk_qso,
+        'cw_qso'        => $cw_qso,
+        'js8_qso'       => $js8_qso,
+        'digi_qso'      => $digi_qso,
     );
 
     // Cache result for 10 minutes
     set_transient( $transient_key, $result, $cache_minutes * MINUTE_IN_SECONDS );
 
-    return $result;
+    return $result; 
 }
 
 /* ============================
@@ -401,3 +402,16 @@ function wavelog_digiqso_shortcode() {
     return intval( $data['digi_qso'] );
 }
 add_shortcode( 'wavelog_digiqso', 'wavelog_digiqso_shortcode' );
+
+/**
+ * Returns the total number of QSOs for the current year
+ * Shortcode: [wavelog_totalqso_year]
+ */
+function wavelog_totalqso_year_shortcode() {
+    $data = wavelog_get_data();
+    if ( is_string( $data ) ) {
+        return esc_html( $data );
+    }
+    return intval( $data['total_qso_year'] );
+}
+add_shortcode( 'wavelog_totalqso_year', 'wavelog_totalqso_year_shortcode' );
