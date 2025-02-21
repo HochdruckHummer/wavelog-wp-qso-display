@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Wavelog QSO statistic Display per mode
-Description: Retrieves Wavelog data via API and displays the QSO numbers per QSO type via shortcodes. The Wavelog URL, the API key and the station ID can be configured in the admin area.
-Version: 1.0
+Description: Retrieves Wavelog data via dedicated Wavelog-Wordpress-API and displays the QSO numbers per QSO type via shortcodes. The Wavelog URL, the API key and the station ID can be configured in the admin area.
+Version: 2.0.1
 Author: Daniel Beckemeier, DO8YDP
 */
 
