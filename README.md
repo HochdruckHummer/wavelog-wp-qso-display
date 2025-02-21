@@ -8,6 +8,10 @@ Retrieves Wavelog data via API and displays the QSO numbers per operating mode v
 
 **Attention:** This plugin uses static 10 minutes caching time to reduce API calls to the Wavelog instance. So allthough this is nearly real-time, there can be a delay of up to ten minutes.
 
+## Compatibility
+
+This script requires at least Wavelog version 2.0.1. to work, as there was an API implemented for this tool.
+
 
 ## Installation:
 
