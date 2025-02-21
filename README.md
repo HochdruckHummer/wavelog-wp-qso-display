@@ -15,7 +15,7 @@ This script requires at least Wavelog version 2.0.1. to work, as there was an AP
 
 ## Installation:
 
-1. Just install the Zip-file as a plugin in your wordpress instance and activate the plugin.
+1. Just install the latest Zip-file as a plugin in your wordpress instance and activate the plugin.
 
 
 2. Go to Settings-Menu in Wordpress and click on "Wavelog":
@@ -33,12 +33,17 @@ This script requires at least Wavelog version 2.0.1. to work, as there was an AP
 *[wavelog_totalqso]*
 *[wavelog_ssbqso]*
 *[wavelog_fmqso]*
+*[wavelog_amqso]*
 *[wavelog_ft8ft4qso]*
+*[wavelog_ft8qso]*
+*[wavelog_ft4qso]*
 *[wavelog_digiqso]*
 *[wavelog_cwqso]*
 *[wavelog_rttyqso]*
 *[wavelog_pskqso]*
 *[wavelog_js8qso]*
+*[wavelog_totalqso_year]*
+
 
 
 
