@@ -1,6 +1,6 @@
 # wavelog-wp-qso-display
 
-**Made by Daniel Beckemeier, DO8YDP**
+**Made by Daniel Beckemeier, DL8YDP**
 
 Retrieves Wavelog data via API and displays the QSO numbers per operating mode via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID can be configured in the admin area of Wordpress. Example site: https://dl8ydp.de:
 
