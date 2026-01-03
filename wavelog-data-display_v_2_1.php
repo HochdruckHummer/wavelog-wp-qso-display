@@ -94,6 +94,25 @@ function wavelog_settings_page() {
             <li><strong>[wavelog_digiqso]</strong> - Displays the total number of Digimode QSOs (FT8, FT4, PSK, RTTY, JS8, etc.).</li>
             <li><strong>[wavelog_totalqso_year]</strong> - Displays the total number of QSOs for the current year.</li>
         </ul>
+                <hr style="margin: 24px 0;">
+
+        <div style="text-align:center; margin: 18px 0 6px;">
+            <a href="https://paypal.me/DanielBeckemeier"
+               target="_blank"
+               rel="nofollow sponsored noopener"
+               title="Donate a beer via PayPal">
+                <img
+                    src="<?php echo esc_url( plugins_url( 'assets/donate.png', __FILE__ ) ); ?>"
+                    alt="Donate a beer"
+                    width="250"
+                    style="height:auto; max-width:100%;"
+                />
+            </a>
+            <p style="margin: 10px 0 0; font-size: 13px; opacity: .85;">
+                If this plugin helps you, feel free to donate a beer 🍺
+            </p>
+        </div>
+
     </div>
     <?php
 }
