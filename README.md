@@ -65,6 +65,7 @@ You can also use a block, with groups inside to achieve something like this:
 - Settings are now sanitized on save: the Wavelog URL must be a valid `https://` URL, the cache duration is limited to 1–1440 minutes, station IDs may only contain digits and commas, and the API key is sanitized as text.
 - The API key field on the settings page is now a password field.
 - Shortcodes, option names and the output with a working API are unchanged.
+- Releases are now created automatically on GitHub, including an installable plugin ZIP.
 
 ##  Support the development
 

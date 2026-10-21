@@ -1,0 +1,85 @@
+name: Release
+
+# Creates a GitHub release with an installable plugin ZIP whenever main
+# contains a plugin version that has no release yet.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PLUGIN_SLUG: wavelog-wp-qso-display
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read plugin version
+        id: version
+        run: |
+          version=$(grep -m1 -E '^Version:' wavelog-data-display.php | sed -E 's/^Version:[[:space:]]*//' | tr -d '[:space:]')
+          if [ -z "$version" ]; then
+            echo "No Version found in plugin header" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check for existing release
+        id: exists
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "Release ${{ steps.version.outputs.tag }} already exists, nothing to do."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up PHP
+        if: steps.exists.outputs.exists == 'false'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: none
+          coverage: none
+
+      - name: Check PHP syntax
+        if: steps.exists.outputs.exists == 'false'
+        run: php -l wavelog-data-display.php
+
+      - name: Extract changelog
+        if: steps.exists.outputs.exists == 'false'
+        run: |
+          # Section "### <version>" in README.md up to the next heading
+          awk -v v="${{ steps.version.outputs.version }}" '
+            $0 == "### " v { found = 1; next }
+            found && /^##/ { exit }
+            found { print }
+          ' README.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "No changelog entry for ${{ steps.version.outputs.version }} in README.md" >&2
+            exit 1
+          fi
+
+      - name: Build plugin ZIP
+        if: steps.exists.outputs.exists == 'false'
+        run: |
+          mkdir -p "build/$PLUGIN_SLUG"
+          cp -R wavelog-data-display.php README.md LICENSE assets "build/$PLUGIN_SLUG/"
+          (cd build && zip -r "../$PLUGIN_SLUG-${{ steps.version.outputs.version }}.zip" "$PLUGIN_SLUG")
+
+      - name: Create release
+        if: steps.exists.outputs.exists == 'false'
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            "$PLUGIN_SLUG-${{ steps.version.outputs.version }}.zip" \
+            --target "$GITHUB_SHA" \
+            --title "${{ steps.version.outputs.tag }}" \
+            --notes-file release-notes.md

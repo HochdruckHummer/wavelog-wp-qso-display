@@ -22,4 +22,5 @@ WordPress plugin that shows QSO statistics from a Wavelog instance via shortcode
 ## Releases
 
 - Bump the `Version:` in the plugin header with every change (semantic versioning).
-- Add an entry to the changelog in `README.md` for every version.
+- Add an entry to the changelog in `README.md` for every version, as a `### <version>` heading under `## Changelog`.
+- Releases are automatic: when `main` contains a version without a release, `.github/workflows/release.yml` creates the tag `v<version>`, a GitHub release with the changelog entry as notes and the plugin ZIP. Don't create releases by hand.
