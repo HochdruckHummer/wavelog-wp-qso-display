@@ -2,7 +2,7 @@
 /*
 Plugin Name: Wavelog QSO statistic Display per mode
 Description: Retrieves Wavelog data via dedicated Wavelog-Wordpress-API and displays the QSO numbers per QSO type via shortcodes. The Wavelog URL, the API key and the station ID(s) can be configured in the admin area. Station IDs can be comma-separated to aggregate multiple stations.
-Version: 2.2.1
+Version: 2.3.0
 Author: Daniel Beckemeier, DL8YDP, www.dl8ydp.de
 */
 
@@ -16,12 +16,76 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Registration of settings
 function wavelog_register_settings() {
-    register_setting( 'wavelog_settings_group', 'wavelog_url' );
-    register_setting( 'wavelog_settings_group', 'wavelog_api_key' );
-    register_setting( 'wavelog_settings_group', 'wavelog_station_id' ); // comma-separated list supported
-    register_setting( 'wavelog_settings_group', 'wavelog_cache_minutes' );
+    register_setting( 'wavelog_settings_group', 'wavelog_url', array(
+        'type'              => 'string',
+        'sanitize_callback' => 'wavelog_sanitize_url',
+    ) );
+    register_setting( 'wavelog_settings_group', 'wavelog_api_key', array(
+        'type'              => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    register_setting( 'wavelog_settings_group', 'wavelog_station_id', array( // comma-separated list supported
+        'type'              => 'string',
+        'sanitize_callback' => 'wavelog_sanitize_station_ids',
+    ) );
+    register_setting( 'wavelog_settings_group', 'wavelog_cache_minutes', array(
+        'type'              => 'integer',
+        'sanitize_callback' => 'wavelog_sanitize_cache_minutes',
+    ) );
 }
 add_action( 'admin_init', 'wavelog_register_settings' );
+
+/**
+ * Sanitizes the Wavelog URL. Only https URLs are accepted.
+ *
+ * @param mixed $value Raw input.
+ * @return string Sanitized URL or empty string if invalid.
+ */
+function wavelog_sanitize_url( $value ) {
+    $raw = trim( (string) $value );
+    $url = esc_url_raw( $raw, array( 'https' ) );
+
+    // sanitize_option may run twice for a new option; only report once
+    static $reported = false;
+    if ( $raw !== '' && $url === '' && ! $reported ) {
+        $reported = true;
+        add_settings_error(
+            'wavelog_url',
+            'wavelog_url_invalid',
+            'The Wavelog URL must be a valid https:// URL.'
+        );
+    }
+
+    return $url;
+}
+
+/**
+ * Sanitizes the station ID list: only digits and commas are kept.
+ *
+ * @param mixed $value Raw input.
+ * @return string Comma-separated list of station IDs.
+ */
+function wavelog_sanitize_station_ids( $value ) {
+    $ids = preg_replace( '/[^0-9,]/', '', (string) $value );
+    $ids = preg_replace( '/,+/', ',', $ids );
+
+    return trim( $ids, ',' );
+}
+
+/**
+ * Sanitizes the cache duration (minutes), limited to 1-1440.
+ *
+ * @param mixed $value Raw input.
+ * @return int Cache duration in minutes.
+ */
+function wavelog_sanitize_cache_minutes( $value ) {
+    $minutes = absint( $value );
+    if ( $minutes === 0 ) {
+        return 10; // default
+    }
+
+    return min( $minutes, 1440 );
+}
 
 // Adding setting page to menu "Settings"
 function wavelog_add_admin_menu() {
@@ -54,7 +118,7 @@ function wavelog_settings_page() {
                 <tr valign="top">
                     <th scope="row">API Key</th>
                     <td>
-                        <input type="text" name="wavelog_api_key" value="<?php echo esc_attr( get_option( 'wavelog_api_key' ) ); ?>" style="width: 400px;" />
+                        <input type="password" name="wavelog_api_key" value="<?php echo esc_attr( get_option( 'wavelog_api_key' ) ); ?>" autocomplete="off" style="width: 400px;" />
                     </td>
                 </tr>
                 <tr valign="top">
@@ -170,10 +234,18 @@ function wavelog_get_data() {
     }
 
     // Cache key must depend on URL + station list (otherwise wrong results when changing IDs)
-    $transient_key = 'wavelog_data_cache_' . md5( $wavelog_url . '|' . implode( ',', $station_ids ) );
+    $cache_hash    = md5( $wavelog_url . '|' . implode( ',', $station_ids ) );
+    $transient_key = 'wavelog_data_cache_' . $cache_hash;
     $cached_data   = get_transient( $transient_key );
     if ( $cached_data !== false ) {
         return $cached_data;
+    }
+
+    // Recent API failure: don't query again until the error cache expires
+    $error_key    = 'wavelog_error_cache_' . $cache_hash;
+    $cached_error = get_transient( $error_key );
+    if ( $cached_error !== false ) {
+        return $cached_error;
     }
 
     // Aggregation buckets
@@ -203,20 +275,24 @@ function wavelog_get_data() {
                 'Content-Type' => 'application/json',
                 'Accept'       => 'application/json'
             ),
-            'timeout' => 15
+            'timeout' => 5
         );
 
         $response = wp_remote_post( trailingslashit( $wavelog_url ) . 'index.php/api/get_wp_stats', $args );
 
         if ( is_wp_error( $response ) ) {
-            return "Error in the API query for station_id {$station_id}: " . $response->get_error_message();
+            $error = "Error in the API query for station_id {$station_id}: " . $response->get_error_message();
+            set_transient( $error_key, $error, 2 * MINUTE_IN_SECONDS );
+            return $error;
         }
 
         $response_body = wp_remote_retrieve_body( $response );
         $data = json_decode( $response_body, true );
 
         if ( ! is_array( $data ) || ( $data['status'] ?? '' ) !== 'successful' ) {
-            return "Error: Something went wrong with fetching data for station_id {$station_id}.";
+            $error = "Error: Something went wrong with fetching data for station_id {$station_id}.";
+            set_transient( $error_key, $error, 2 * MINUTE_IN_SECONDS );
+            return $error;
         }
 
         // Totals addieren
@@ -303,6 +379,21 @@ function wavelog_get_data() {
     return $result;
 }
 
+/**
+ * Formats an error message for shortcode output.
+ * Only administrators see the technical message, visitors see a dash.
+ *
+ * @param string $message Error message.
+ * @return string Escaped output.
+ */
+function wavelog_error_output( $message ) {
+    if ( current_user_can( 'manage_options' ) ) {
+        return esc_html( $message );
+    }
+
+    return '–';
+}
+
 /* ============================
    Shortcode-Functions
 ============================ */
@@ -314,7 +405,7 @@ function wavelog_get_data() {
 function wavelog_totalqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['total_qso'] );
 }
@@ -327,7 +418,7 @@ add_shortcode( 'wavelog_totalqso', 'wavelog_totalqso_shortcode' );
 function wavelog_ssbqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['ssb_qso'] );
 }
@@ -340,7 +431,7 @@ add_shortcode( 'wavelog_ssbqso', 'wavelog_ssbqso_shortcode' );
 function wavelog_fmqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['fm_qso'] );
 }
@@ -353,7 +444,7 @@ add_shortcode( 'wavelog_fmqso', 'wavelog_fmqso_shortcode' );
 function wavelog_amqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['am_qso'] );
 }
@@ -366,7 +457,7 @@ add_shortcode( 'wavelog_amqso', 'wavelog_amqso_shortcode' );
 function wavelog_rttyqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['rtty_qso'] );
 }
@@ -379,7 +470,7 @@ add_shortcode( 'wavelog_rttyqso', 'wavelog_rttyqso_shortcode' );
 function wavelog_ft4qso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['ft4_qso'] );
 }
@@ -392,7 +483,7 @@ add_shortcode( 'wavelog_ft4qso', 'wavelog_ft4qso_shortcode' );
 function wavelog_ft8qso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['ft8_qso'] );
 }
@@ -405,7 +496,7 @@ add_shortcode( 'wavelog_ft8qso', 'wavelog_ft8qso_shortcode' );
 function wavelog_ft8ft4qso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['ft8ft4_qso'] );
 }
@@ -418,7 +509,7 @@ add_shortcode( 'wavelog_ft8ft4qso', 'wavelog_ft8ft4qso_shortcode' );
 function wavelog_pskqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['psk_qso'] );
 }
@@ -431,7 +522,7 @@ add_shortcode( 'wavelog_pskqso', 'wavelog_pskqso_shortcode' );
 function wavelog_cwqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['cw_qso'] );
 }
@@ -444,7 +535,7 @@ add_shortcode( 'wavelog_cwqso', 'wavelog_cwqso_shortcode' );
 function wavelog_js8qso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['js8_qso'] );
 }
@@ -457,7 +548,7 @@ add_shortcode( 'wavelog_js8qso', 'wavelog_js8qso_shortcode' );
 function wavelog_digiqso_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['digi_qso'] );
 }
@@ -470,7 +561,7 @@ add_shortcode( 'wavelog_digiqso', 'wavelog_digiqso_shortcode' );
 function wavelog_totalqso_year_shortcode() {
     $data = wavelog_get_data();
     if ( is_string( $data ) ) {
-        return esc_html( $data );
+        return wavelog_error_output( $data );
     }
     return intval( $data['total_qso_year'] );
 }
