@@ -56,6 +56,17 @@ You can use TablePress to create nice looking tables to use the shortcodes in, l
 You can also use a block, with groups inside to achieve something like this:
 <img width="1158" alt="Shortcodes grouped inside a block" src="https://github.com/user-attachments/assets/a9fdffc9-c294-407e-bda1-6bd79f546676" />
 
+## Changelog
+
+### 2.3.0
+
+- API errors are cached for 2 minutes, so an unreachable Wavelog instance is not queried again by every shortcode. The API timeout was reduced from 15 to 5 seconds.
+- Technical error messages (e.g. connection errors, station IDs) are only shown to logged-in administrators (`manage_options`). Visitors see "–" instead.
+- Settings are now sanitized on save: the Wavelog URL must be a valid `https://` URL, the cache duration is limited to 1–1440 minutes, station IDs may only contain digits and commas, and the API key is sanitized as text.
+- The API key field on the settings page is now a password field.
+- Shortcodes, option names and the output with a working API are unchanged.
+- Releases are now created automatically on GitHub, including an installable plugin ZIP.
+
 ##  Support the development
 
 Did this application help you?
