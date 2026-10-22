@@ -17,10 +17,13 @@ WordPress plugin that shows QSO statistics from a Wavelog instance via shortcode
 
 ## Compatibility
 
-- Shortcode names and option names (`wavelog_url`, `wavelog_api_key`, `wavelog_station_id`, `wavelog_cache_minutes`) are public interface — don't rename them.
+- Shortcode names and option names (`wavelog_url`, `wavelog_api_key`, `wavelog_station_id`, `wavelog_cache_minutes`) are public interface — don't rename them. The same applies to the main file name `wavelog-data-display.php`: renaming it deactivates the plugin on existing sites.
 
 ## Releases
 
-- Bump the `Version:` in the plugin header with every change (semantic versioning).
-- Add an entry to the changelog in `README.md` for every version, as a `### <version>` heading under `## Changelog`.
-- Releases are automatic: when `main` contains a version without a release, `.github/workflows/release.yml` creates the tag `v<version>`, a GitHub release with the changelog entry as notes and the plugin ZIP. Don't create releases by hand.
+- Bump the `Version:` in the plugin header with every change (semantic versioning), and set `Stable tag:` in `readme.txt` to the same version.
+- Add a changelog entry for every version in both files: `### <version>` under `## Changelog` in `README.md` (used for the GitHub release notes) and `= <version> =` under `== Changelog ==` in `readme.txt` (shown on WordPress.org). The `Checks` workflow fails if one of them is missing.
+- Keep `Tested up to:` in `readme.txt` at the current WordPress major version.
+- Releases are automatic: when `main` contains a version without a release, `.github/workflows/release.yml` creates the tag `v<version>`, a GitHub release with the changelog entry as notes and the plugin ZIP. With the secrets `SVN_USERNAME`/`SVN_PASSWORD` set, it also deploys to the WordPress.org SVN repository. Don't create releases by hand.
+- Plugin slug and text domain are `qso-statistics-for-wavelog`. All user-facing strings use the translation functions with this text domain.
+- Files that go into the plugin ZIP are listed in the "Build plugin ZIP" step of `release.yml`; add new plugin files there.

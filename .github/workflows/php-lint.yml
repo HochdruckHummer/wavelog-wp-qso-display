@@ -1,4 +1,4 @@
-name: PHP syntax check
+name: Checks
 
 on:
   push:
@@ -30,3 +30,29 @@ jobs:
         run: |
           find . -name '*.php' -not -path './vendor/*' -print0 \
             | xargs -0 -n1 php -l
+
+  version:
+    name: Version consistency
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare plugin version, readme.txt and changelog
+        run: |
+          version=$(grep -m1 -E '^Version:' wavelog-data-display.php | sed -E 's/^Version:[[:space:]]*//' | tr -d '[:space:]')
+          stable=$(grep -m1 -E '^Stable tag:' readme.txt | sed -E 's/^Stable tag:[[:space:]]*//' | tr -d '[:space:]')
+          status=0
+          if [ "$stable" != "$version" ]; then
+            echo "::error::Stable tag in readme.txt ($stable) does not match plugin version ($version)"
+            status=1
+          fi
+          if ! grep -qx "### $version" README.md; then
+            echo "::error::No changelog entry '### $version' in README.md"
+            status=1
+          fi
+          if ! grep -qx "= $version =" readme.txt; then
+            echo "::error::No changelog entry '= $version =' in readme.txt"
+            status=1
+          fi
+          exit $status

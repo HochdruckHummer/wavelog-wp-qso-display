@@ -1,6 +1,8 @@
-# wavelog-wp-qso-display
+# QSO Statistics for Wavelog
 
 **Made by Daniel Beckemeier, DL8YDP**
+
+WordPress plugin, formerly "Wavelog QSO statistic Display per mode". Not affiliated with the Wavelog project.
 
 Retrieves Wavelog data via API and displays the QSO numbers per operating mode via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID(s) can be configured in the admin area of Wordpress. Example site: https://dl8ydp.de:
 
@@ -57,6 +59,14 @@ You can also use a block, with groups inside to achieve something like this:
 <img width="1158" alt="Shortcodes grouped inside a block" src="https://github.com/user-attachments/assets/a9fdffc9-c294-407e-bda1-6bd79f546676" />
 
 ## Changelog
+
+### 2.4.0
+
+- Prepared for the WordPress.org plugin directory: new name "QSO Statistics for Wavelog", `readme.txt`, complete plugin header (license, requirements, text domain).
+- All texts in the admin area and error messages are translatable (text domain `qso-statistics-for-wavelog`).
+- Settings are removed from the database when the plugin is deleted (`uninstall.php`).
+- The release ZIP now unpacks into the folder `qso-statistics-for-wavelog`, the same as the WordPress.org version. If you installed an earlier ZIP, the plugin may show up twice after uploading this one: deactivate and delete the old copy, the settings are kept.
+- Shortcodes, option names and the output are unchanged.
 
 ### 2.3.0
 

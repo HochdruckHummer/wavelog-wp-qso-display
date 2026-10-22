@@ -1,9 +1,16 @@
 <?php
 /*
-Plugin Name: Wavelog QSO statistic Display per mode
+Plugin Name: QSO Statistics for Wavelog
+Plugin URI: https://github.com/HochdruckHummer/wavelog-wp-qso-display
 Description: Retrieves Wavelog data via dedicated Wavelog-Wordpress-API and displays the QSO numbers per QSO type via shortcodes. The Wavelog URL, the API key and the station ID(s) can be configured in the admin area. Station IDs can be comma-separated to aggregate multiple stations.
-Version: 2.3.0
-Author: Daniel Beckemeier, DL8YDP, www.dl8ydp.de
+Version: 2.4.0
+Requires at least: 6.0
+Requires PHP: 8.2
+Author: Daniel Beckemeier, DL8YDP
+Author URI: https://www.dl8ydp.de
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Text Domain: qso-statistics-for-wavelog
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,7 +59,7 @@ function wavelog_sanitize_url( $value ) {
         add_settings_error(
             'wavelog_url',
             'wavelog_url_invalid',
-            'The Wavelog URL must be a valid https:// URL.'
+            __( 'The Wavelog URL must be a valid https:// URL.', 'qso-statistics-for-wavelog' )
         );
     }
 
@@ -90,7 +97,7 @@ function wavelog_sanitize_cache_minutes( $value ) {
 // Adding setting page to menu "Settings"
 function wavelog_add_admin_menu() {
     add_options_page(
-        'Wavelog QSO Display Settings',  // Page title
+        __( 'QSO Statistics for Wavelog Settings', 'qso-statistics-for-wavelog' ), // Page title
         'Wavelog',                      // Menu title
         'manage_options',               // Capability
         'wavelog-settings',             // Menu slug
@@ -101,62 +108,67 @@ add_action( 'admin_menu', 'wavelog_add_admin_menu' );
 
 // HTML of the settings page
 function wavelog_settings_page() {
+    $shortcodes = array(
+        'wavelog_totalqso'      => __( 'Displays the total number of all QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_ssbqso'        => __( 'Displays the total number of SSB QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_fmqso'         => __( 'Displays the total number of FM QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_amqso'         => __( 'Displays the total number of AM QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_rttyqso'       => __( 'Displays the total number of RTTY QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_ft4qso'        => __( 'Displays the total number of FT4 QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_ft8qso'        => __( 'Displays the total number of FT8 QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_ft8ft4qso'     => __( 'Displays the total number of FT8 and FT4 QSOs summed up.', 'qso-statistics-for-wavelog' ),
+        'wavelog_pskqso'        => __( 'Displays the total number of PSK QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_cwqso'         => __( 'Displays the total number of CW QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_js8qso'        => __( 'Displays the total number of JS8 QSOs.', 'qso-statistics-for-wavelog' ),
+        'wavelog_digiqso'       => __( 'Displays the total number of Digimode QSOs (FT8, FT4, PSK, RTTY, JS8, etc.).', 'qso-statistics-for-wavelog' ),
+        'wavelog_totalqso_year' => __( 'Displays the total number of QSOs for the current year.', 'qso-statistics-for-wavelog' ),
+    );
     ?>
     <div class="wrap">
-        <h1>Wavelog QSO Display Settings</h1>
+        <h1><?php esc_html_e( 'QSO Statistics for Wavelog Settings', 'qso-statistics-for-wavelog' ); ?></h1>
         <form method="post" action="options.php">
             <?php settings_fields( 'wavelog_settings_group' ); ?>
             <?php do_settings_sections( 'wavelog_settings_group' ); ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row">Wavelog URL</th>
+                    <th scope="row"><?php esc_html_e( 'Wavelog URL', 'qso-statistics-for-wavelog' ); ?></th>
                     <td>
                         <input type="text" name="wavelog_url" value="<?php echo esc_attr( get_option( 'wavelog_url' ) ); ?>" style="width: 400px;" />
-                        <br /><small>Example: https://your-wavelog-instance.de</small>
+                        <br /><small><?php esc_html_e( 'Example: https://your-wavelog-instance.de', 'qso-statistics-for-wavelog' ); ?></small>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">API Key</th>
+                    <th scope="row"><?php esc_html_e( 'API Key', 'qso-statistics-for-wavelog' ); ?></th>
                     <td>
                         <input type="password" name="wavelog_api_key" value="<?php echo esc_attr( get_option( 'wavelog_api_key' ) ); ?>" autocomplete="off" style="width: 400px;" />
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">Station ID(s)</th>
+                    <th scope="row"><?php esc_html_e( 'Station ID(s)', 'qso-statistics-for-wavelog' ); ?></th>
                     <td>
                         <input type="text" name="wavelog_station_id" value="<?php echo esc_attr( get_option( 'wavelog_station_id' ) ); ?>" style="width: 200px;" />
-                        <br /><small>Single ID (e.g. 1) or comma-separated list (e.g. 1,2,5). Totals will be summed across all given station IDs.</small>
+                        <br /><small><?php esc_html_e( 'Single ID (e.g. 1) or comma-separated list (e.g. 1,2,5). Totals will be summed across all given station IDs.', 'qso-statistics-for-wavelog' ); ?></small>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">Cache Duration (minutes)</th>
+                    <th scope="row"><?php esc_html_e( 'Cache Duration (minutes)', 'qso-statistics-for-wavelog' ); ?></th>
                     <td>
                         <input type="number" name="wavelog_cache_minutes" min="1" max="1440"
                         value="<?php echo esc_attr( get_option( 'wavelog_cache_minutes', '10' ) ); ?>"
                         style="width: 80px;" />
-                          <br /><small>Enter a value from 1 to 1440 minutes (default: 10 minutes).</small>
+                          <br /><small><?php esc_html_e( 'Enter a value from 1 to 1440 minutes (default: 10 minutes).', 'qso-statistics-for-wavelog' ); ?></small>
                     </td>
                 </tr>
             </table>
             <?php submit_button(); ?>
         </form>
 
-        <h2>Available Shortcodes</h2>
-        <p>You can use the following shortcodes to display QSO statistics on your pages or posts:</p>
+        <h2><?php esc_html_e( 'Available Shortcodes', 'qso-statistics-for-wavelog' ); ?></h2>
+        <p><?php esc_html_e( 'You can use the following shortcodes to display QSO statistics on your pages or posts:', 'qso-statistics-for-wavelog' ); ?></p>
         <ul>
-            <li><strong>[wavelog_totalqso]</strong> - Displays the total number of all QSOs.</li>
-            <li><strong>[wavelog_ssbqso]</strong> - Displays the total number of SSB QSOs.</li>
-            <li><strong>[wavelog_fmqso]</strong> - Displays the total number of FM QSOs.</li>
-            <li><strong>[wavelog_amqso]</strong> - Displays the total number of AM QSOs.</li>
-            <li><strong>[wavelog_rttyqso]</strong> - Displays the total number of RTTY QSOs.</li>
-            <li><strong>[wavelog_ft4qso]</strong> - Displays the total number of FT4 QSOs.</li>
-            <li><strong>[wavelog_ft8qso]</strong> - Displays the total number of FT8 QSOs.</li>
-            <li><strong>[wavelog_ft8ft4qso]</strong> - Displays the total number of FT8 and FT4 QSOs summed up.</li>
-            <li><strong>[wavelog_pskqso]</strong> - Displays the total number of PSK QSOs.</li>
-            <li><strong>[wavelog_cwqso]</strong> - Displays the total number of CW QSOs.</li>
-            <li><strong>[wavelog_js8qso]</strong> - Displays the total number of JS8 QSOs.</li>
-            <li><strong>[wavelog_digiqso]</strong> - Displays the total number of Digimode QSOs (FT8, FT4, PSK, RTTY, JS8, etc.).</li>
-            <li><strong>[wavelog_totalqso_year]</strong> - Displays the total number of QSOs for the current year.</li>
+            <?php foreach ( $shortcodes as $tag => $description ) : ?>
+                <li><strong>[<?php echo esc_html( $tag ); ?>]</strong> - <?php echo esc_html( $description ); ?></li>
+            <?php endforeach; ?>
         </ul>
                 <hr style="margin: 24px 0;">
 
@@ -164,16 +176,16 @@ function wavelog_settings_page() {
             <a href="https://paypal.me/DanielBeckemeier"
                target="_blank"
                rel="nofollow sponsored noopener"
-               title="Donate a beer via PayPal">
+               title="<?php esc_attr_e( 'Donate a beer via PayPal', 'qso-statistics-for-wavelog' ); ?>">
                 <img
                     src="<?php echo esc_url( plugins_url( 'assets/donate.png', __FILE__ ) ); ?>"
-                    alt="Donate a beer"
+                    alt="<?php esc_attr_e( 'Donate a beer', 'qso-statistics-for-wavelog' ); ?>"
                     width="250"
                     style="height:auto; max-width:100%;"
                 />
             </a>
             <p style="margin: 10px 0 0; font-size: 13px; opacity: .85;">
-                If this plugin helps you, feel free to donate a beer 🍺
+                <?php esc_html_e( 'If this plugin helps you, feel free to donate a beer', 'qso-statistics-for-wavelog' ); ?> 🍺
             </p>
         </div>
 
@@ -224,7 +236,7 @@ function wavelog_get_data() {
     $cache_minutes = get_option( 'wavelog_cache_minutes', 10 ); // default 10
 
     if ( empty( $wavelog_url ) || empty( $api_key ) || empty( $station_ids ) ) {
-        return 'Please configure the Wavelog settings in the admin area (URL, API key, Station ID(s)).';
+        return __( 'Please configure the Wavelog settings in the admin area (URL, API key, Station ID(s)).', 'qso-statistics-for-wavelog' );
     }
 
     // Validate the cache minutes (ensure it's between 1 and 1440)
@@ -281,7 +293,8 @@ function wavelog_get_data() {
         $response = wp_remote_post( trailingslashit( $wavelog_url ) . 'index.php/api/get_wp_stats', $args );
 
         if ( is_wp_error( $response ) ) {
-            $error = "Error in the API query for station_id {$station_id}: " . $response->get_error_message();
+            /* translators: 1: station ID, 2: error message */
+            $error = sprintf( __( 'Error in the API query for station_id %1$s: %2$s', 'qso-statistics-for-wavelog' ), $station_id, $response->get_error_message() );
             set_transient( $error_key, $error, 2 * MINUTE_IN_SECONDS );
             return $error;
         }
@@ -290,7 +303,8 @@ function wavelog_get_data() {
         $data = json_decode( $response_body, true );
 
         if ( ! is_array( $data ) || ( $data['status'] ?? '' ) !== 'successful' ) {
-            $error = "Error: Something went wrong with fetching data for station_id {$station_id}.";
+            /* translators: %s: station ID */
+            $error = sprintf( __( 'Error: Something went wrong with fetching data for station_id %s.', 'qso-statistics-for-wavelog' ), $station_id );
             set_transient( $error_key, $error, 2 * MINUTE_IN_SECONDS );
             return $error;
         }

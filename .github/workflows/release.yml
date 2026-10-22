@@ -1,7 +1,9 @@
 name: Release
 
 # Creates a GitHub release with an installable plugin ZIP whenever main
-# contains a plugin version that has no release yet.
+# contains a plugin version that has no release yet. If the secrets
+# SVN_USERNAME and SVN_PASSWORD are set, the version is also deployed to
+# the WordPress.org plugin directory.
 
 on:
   push:
@@ -16,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      PLUGIN_SLUG: wavelog-wp-qso-display
+      PLUGIN_SLUG: qso-statistics-for-wavelog
+      SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+      SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +56,18 @@ jobs:
 
       - name: Check PHP syntax
         if: steps.exists.outputs.exists == 'false'
-        run: php -l wavelog-data-display.php
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 php -l
+
+      - name: Check readme.txt stable tag
+        if: steps.exists.outputs.exists == 'false'
+        run: |
+          stable=$(grep -m1 -E '^Stable tag:' readme.txt | sed -E 's/^Stable tag:[[:space:]]*//' | tr -d '[:space:]')
+          if [ "$stable" != "${{ steps.version.outputs.version }}" ]; then
+            echo "Stable tag in readme.txt ($stable) does not match plugin version (${{ steps.version.outputs.version }})" >&2
+            exit 1
+          fi
 
       - name: Extract changelog
         if: steps.exists.outputs.exists == 'false'
@@ -72,7 +87,7 @@ jobs:
         if: steps.exists.outputs.exists == 'false'
         run: |
           mkdir -p "build/$PLUGIN_SLUG"
-          cp -R wavelog-data-display.php README.md LICENSE assets "build/$PLUGIN_SLUG/"
+          cp -R wavelog-data-display.php uninstall.php readme.txt README.md LICENSE assets "build/$PLUGIN_SLUG/"
           (cd build && zip -r "../$PLUGIN_SLUG-${{ steps.version.outputs.version }}.zip" "$PLUGIN_SLUG")
 
       - name: Create release
@@ -83,3 +98,11 @@ jobs:
             --target "$GITHUB_SHA" \
             --title "${{ steps.version.outputs.tag }}" \
             --notes-file release-notes.md
+
+      - name: Deploy to WordPress.org
+        if: steps.exists.outputs.exists == 'false' && env.SVN_USERNAME != '' && env.SVN_PASSWORD != ''
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SLUG: ${{ env.PLUGIN_SLUG }}
+          VERSION: ${{ steps.version.outputs.version }}
+          BUILD_DIR: build/${{ env.PLUGIN_SLUG }}
