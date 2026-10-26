@@ -1,14 +1,21 @@
 # QSO Statistics for Wavelog
 
+![QSO Statistics for Wavelog](.wordpress-org/banner-1544x500.png)
+
 **Made by Daniel Beckemeier, DL8YDP**
 
 WordPress plugin, formerly "Wavelog QSO statistic Display per mode". Not affiliated with the Wavelog project.
+
+## Download
+
+- **WordPress plugin directory (recommended):** [wordpress.org/plugins/qso-statistics-for-wavelog](https://wordpress.org/plugins/qso-statistics-for-wavelog/) – install directly from your WordPress admin and get automatic updates.
+- **ZIP file:** [latest release on GitHub](https://github.com/HochdruckHummer/wavelog-wp-qso-display/releases/latest) (`qso-statistics-for-wavelog-<version>.zip`)
 
 Retrieves Wavelog data via API and displays the QSO numbers per operating mode via shortcodes in Wordpress. The Wavelog URL, the API key and the station ID(s) can be configured in the admin area of Wordpress. Example site: https://dl8ydp.de:
 
 <img width="1158" alt="Bildschirmfoto 2025-02-12 um 15 19 52" src="https://github.com/user-attachments/assets/a9fdffc9-c294-407e-bda1-6bd79f546676" />
 
-**Attention:** This plugin uses static 10 minutes caching time to reduce API calls to the Wavelog instance. So allthough this is nearly real-time, there can be a delay of up to ten minutes.
+**Attention:** To reduce API calls to the Wavelog instance, results are cached. The cache duration can be set from 1 to 1440 minutes (default: 10 minutes), so there can be a delay of up to the configured duration.
 
 ## Compatibility
 
@@ -17,7 +24,7 @@ This script requires at least Wavelog version 2.0.1. to work, as there was an AP
 
 ## Installation:
 
-1. Just install the latest Zip-file as a plugin in your wordpress instance and activate the plugin.
+1. In WordPress, go to *Plugins → Add New*, search for "QSO Statistics for Wavelog", install and activate it. Alternatively, upload the [latest ZIP file](https://github.com/HochdruckHummer/wavelog-wp-qso-display/releases/latest) via *Plugins → Add New → Upload Plugin*.
 
 
 2. Go to Settings-Menu in Wordpress and click on "Wavelog":
@@ -25,7 +32,7 @@ This script requires at least Wavelog version 2.0.1. to work, as there was an AP
 <img width="360" alt="Wordpress settings menu" src="https://github.com/user-attachments/assets/857d4aba-90ae-4ee2-be52-bb4476d6919a" />
 
 
-3. Enter your Wavelog URL, API key (please only use a read-only key) and enter your station ID, which should be "1" in most cases. You can also add multiple station IDs, seaparated by comma (example: 1,3,10,15), these will be summep up then.
+3. Enter your Wavelog URL, API key (please only use a read-only key) and enter your station ID, which should be "1" in most cases. You can also add multiple station IDs, separated by comma (example: 1,3,10,15), these will be summed up then.
 
 <img width="830" alt="Backend settings" src="https://github.com/user-attachments/assets/b878078f-66f6-4e74-ac0a-252a20644377" />
 
@@ -59,6 +66,13 @@ You can also use a block, with groups inside to achieve something like this:
 <img width="1158" alt="Shortcodes grouped inside a block" src="https://github.com/user-attachments/assets/a9fdffc9-c294-407e-bda1-6bd79f546676" />
 
 ## Changelog
+
+### 2.4.3
+
+- German banner for the plugin page on de.wordpress.org (`banner-*-de.png` in `.wordpress-org`).
+- German translations of the plugin and the plugin page in `translations/`, ready to import on translate.wordpress.org.
+- README: banner, links to the WordPress.org plugin page and the latest ZIP, updated caching note and installation steps.
+- No functional changes.
 
 ### 2.4.2
 

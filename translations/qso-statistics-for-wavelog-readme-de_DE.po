@@ -1,0 +1,239 @@
+# Translation of Plugins - QSO Statistics for Wavelog - Stable Readme (latest release) in German
+# This file is distributed under the same license as the Plugins - QSO Statistics for Wavelog - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: +0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: de\n"
+"Project-Id-Version: Plugins - QSO Statistics for Wavelog - Stable Readme (latest release)\n"
+
+#. Short description.
+#, gp-priority: high
+msgid "Shows QSO statistics from your Wavelog logbook on your website via shortcodes: total QSOs, QSOs this year and QSOs per mode."
+msgstr "Zeigt QSO-Statistiken aus deinem Wavelog-Logbuch per Shortcode auf deiner Website an: alle QSOs, QSOs in diesem Jahr und QSOs pro Betriebsart."
+
+#. Plugin name.
+#, gp-priority: high
+msgid "QSO Statistics for Wavelog"
+msgstr "QSO Statistics for Wavelog"
+
+#. Found in faq paragraph.
+msgid "Create a read-only API key in Wavelog. The plugin only reads statistics."
+msgstr "Lege in Wavelog einen API-Schlüssel mit reinen Leserechten an. Das Plugin liest nur Statistiken."
+
+#. Found in faq paragraph.
+msgid "The data could not be retrieved. Log in as an administrator and open the page: you will see the actual error message instead of the dash."
+msgstr "Die Daten konnten nicht abgerufen werden. Melde dich als Administrator an und öffne die Seite: Dann siehst du statt des Strichs die eigentliche Fehlermeldung."
+
+#. Found in faq paragraph.
+msgid "Results are cached to reduce API calls. Changes in Wavelog show up after the configured cache duration (default 10 minutes)."
+msgstr "Die Ergebnisse werden zwischengespeichert, um API-Aufrufe zu reduzieren. Änderungen in Wavelog erscheinen nach Ablauf der eingestellten Cache-Dauer (Standard: 10 Minuten)."
+
+#. Found in faq header.
+msgid "Which API key should I use?"
+msgstr "Welchen API-Schlüssel sollte ich verwenden?"
+
+#. Found in faq header.
+msgid "The shortcode only shows \"–\""
+msgstr "Der Shortcode zeigt nur „–“ an"
+
+#. Found in faq header.
+msgid "Why don't the numbers update immediately?"
+msgstr "Warum werden die Zahlen nicht sofort aktualisiert?"
+
+#. Found in installation paragraph.
+msgid "Requires Wavelog 2.0.1 or newer."
+msgstr "Erfordert Wavelog 2.0.1 oder neuer."
+
+#. Found in installation list item.
+msgid "Add one of the shortcodes to any page, post or block."
+msgstr "Füge einen der Shortcodes in eine beliebige Seite, einen Beitrag oder einen Block ein."
+
+#. Found in installation list item.
+msgid "Enter your Wavelog URL (https only), an API key (please use a read-only key) and your station ID, which is \"1\" in most cases. Multiple station IDs can be separated by commas (e.g. 1,3,10)."
+msgstr "Gib deine Wavelog-URL (nur https), einen API-Schlüssel (bitte nur mit Leserechten) und deine Station-ID ein, meist ist das „1“. Mehrere Station-IDs kannst du durch Kommas trennen (z. B. 1,3,10)."
+
+#. Found in installation list item.
+msgid "Go to <em>Settings → Wavelog</em>."
+msgstr "Gehe zu <em>Einstellungen → Wavelog</em>."
+
+#. Found in installation list item.
+msgid "Install the plugin via <em>Plugins → Add New</em> or upload the ZIP file, then activate it."
+msgstr "Installiere das Plugin über <em>Plugins → Neues Plugin hinzufügen</em> oder lade die ZIP-Datei hoch und aktiviere es anschließend."
+
+#. Found in description paragraph.
+msgid "The terms and privacy policy of the Wavelog instance are those of its operator. Information about the Wavelog software: https://github.com/wavelog/wavelog"
+msgstr "Für die Wavelog-Instanz gelten die Nutzungsbedingungen und die Datenschutzerklärung ihres Betreibers. Informationen zur Wavelog-Software: https://github.com/wavelog/wavelog"
+
+#. Found in description paragraph.
+msgid "This plugin connects to the Wavelog instance you configure in the settings. Wavelog is a self-hosted logbook application for amateur radio, so this is usually your own server."
+msgstr "Dieses Plugin verbindet sich mit der Wavelog-Instanz, die du in den Einstellungen angibst. Wavelog ist eine selbst gehostete Logbuch-Software für den Amateurfunk, in der Regel ist das also dein eigener Server."
+
+#. Found in description paragraph.
+msgid "This plugin is not affiliated with or endorsed by the Wavelog project."
+msgstr "Dieses Plugin steht in keiner Verbindung zum Wavelog-Projekt und wird von diesem nicht unterstützt."
+
+#. Found in description paragraph.
+msgid "QSO Statistics for Wavelog retrieves the QSO statistics of your own <a href=\"https://github.com/wavelog/wavelog\">Wavelog</a> instance and displays them anywhere on your site via shortcodes."
+msgstr "QSO Statistics for Wavelog ruft die QSO-Statistiken deiner eigenen <a href=\"https://github.com/wavelog/wavelog\">Wavelog</a>-Instanz ab und zeigt sie per Shortcode an beliebiger Stelle auf deiner Website an."
+
+#. Found in description list item.
+msgid "<strong>What is received:</strong> aggregated QSO counts. No data about your visitors is sent."
+msgstr "<strong>Was empfangen wird:</strong> zusammengefasste QSO-Zahlen. Es werden keine Daten über deine Besucher übertragen."
+
+#. Found in description list item.
+msgid "<strong>When:</strong> whenever a page with one of the shortcodes is rendered and no cached result is available (at most once per configured cache duration; after an error at most once every 2 minutes)."
+msgstr "<strong>Wann:</strong> immer dann, wenn eine Seite mit einem der Shortcodes aufgerufen wird und kein zwischengespeichertes Ergebnis vorliegt (höchstens einmal pro eingestellter Cache-Dauer; nach einem Fehler höchstens alle 2 Minuten)."
+
+#. Found in description list item.
+msgid "<strong>What is sent:</strong> your Wavelog API key and the configured station ID(s), as a POST request to <code>&lt;your Wavelog URL&gt;/index.php/api/get_wp_stats</code>."
+msgstr "<strong>Was gesendet wird:</strong> dein Wavelog-API-Schlüssel und die eingestellte(n) Station-ID(s), als POST-Anfrage an <code>&lt;deine Wavelog-URL&gt;/index.php/api/get_wp_stats</code>."
+
+#. Found in description list item.
+msgid "<code>[wavelog_digiqso]</code> – all digital mode QSOs (FT8, FT4, PSK, RTTY, JS8, etc.)"
+msgstr "<code>[wavelog_digiqso]</code> – alle QSOs in digitalen Betriebsarten (FT8, FT4, PSK, RTTY, JS8 usw.)"
+
+#. Found in description list item.
+msgid "<code>[wavelog_js8qso]</code> – JS8 QSOs"
+msgstr "<code>[wavelog_js8qso]</code> – JS8-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_ft8ft4qso]</code> – FT8 and FT4 QSOs summed up"
+msgstr "<code>[wavelog_ft8ft4qso]</code> – FT8- und FT4-QSOs zusammengerechnet"
+
+#. Found in description list item.
+msgid "<code>[wavelog_ft4qso]</code> – FT4 QSOs"
+msgstr "<code>[wavelog_ft4qso]</code> – FT4-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_ft8qso]</code> – FT8 QSOs"
+msgstr "<code>[wavelog_ft8qso]</code> – FT8-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_pskqso]</code> – PSK QSOs (including variants like PSK31)"
+msgstr "<code>[wavelog_pskqso]</code> – PSK-QSOs (einschließlich Varianten wie PSK31)"
+
+#. Found in description list item.
+msgid "<code>[wavelog_rttyqso]</code> – RTTY QSOs"
+msgstr "<code>[wavelog_rttyqso]</code> – RTTY-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_cwqso]</code> – CW QSOs"
+msgstr "<code>[wavelog_cwqso]</code> – CW-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_amqso]</code> – AM QSOs"
+msgstr "<code>[wavelog_amqso]</code> – AM-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_fmqso]</code> – FM QSOs"
+msgstr "<code>[wavelog_fmqso]</code> – FM-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_ssbqso]</code> – SSB QSOs"
+msgstr "<code>[wavelog_ssbqso]</code> – SSB-QSOs"
+
+#. Found in description list item.
+msgid "<code>[wavelog_totalqso_year]</code> – total number of QSOs in the current year"
+msgstr "<code>[wavelog_totalqso_year]</code> – Gesamtzahl der QSOs im aktuellen Jahr"
+
+#. Found in description list item.
+msgid "<code>[wavelog_totalqso]</code> – total number of all QSOs"
+msgstr "<code>[wavelog_totalqso]</code> – Gesamtzahl aller QSOs"
+
+#. Found in description list item.
+msgid "Visitors never see technical error messages; administrators do"
+msgstr "Besucher sehen nie technische Fehlermeldungen, Administratoren schon"
+
+#. Found in description list item.
+msgid "Results are cached (1–1440 minutes, default 10) to keep the load on your Wavelog instance low"
+msgstr "Die Ergebnisse werden zwischengespeichert (1–1440 Minuten, Standard 10), damit deine Wavelog-Instanz wenig belastet wird"
+
+#. Found in description list item.
+msgid "Multiple station IDs can be combined, totals are summed up"
+msgstr "Mehrere Station-IDs lassen sich kombinieren, die Zahlen werden addiert"
+
+#. Found in description list item.
+msgid "QSOs per mode: SSB, FM, AM, CW, RTTY, PSK, FT8, FT4, JS8 and all digital modes combined"
+msgstr "QSOs pro Betriebsart: SSB, FM, AM, CW, RTTY, PSK, FT8, FT4, JS8 und alle digitalen Betriebsarten zusammen"
+
+#. Found in description list item.
+msgid "Total number of QSOs and QSOs of the current year"
+msgstr "Gesamtzahl der QSOs und QSOs im aktuellen Jahr"
+
+#. Found in description header.
+msgid "External services"
+msgstr "Externe Dienste"
+
+#. Found in description header.
+msgid "Available shortcodes"
+msgstr "Verfügbare Shortcodes"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "The main plugin file no longer changes its name with every version."
+msgstr "Die Haupt-Plugin-Datei ändert ihren Namen nicht mehr mit jeder Version."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Multiple station IDs possible."
+msgstr "Mehrere Station-IDs möglich."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "The API key field is now a password field."
+msgstr "Das Feld für den API-Schlüssel ist jetzt ein Passwortfeld."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "All settings are sanitized on save (https-only URL, cache 1–1440 minutes, numeric station IDs)."
+msgstr "Alle Einstellungen werden beim Speichern bereinigt (nur https-URLs, Cache 1–1440 Minuten, numerische Station-IDs)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Technical error messages are only shown to administrators; visitors see \"–\"."
+msgstr "Technische Fehlermeldungen sehen nur Administratoren, Besucher sehen „–“."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "API errors are cached for 2 minutes; API timeout reduced from 15 to 5 seconds."
+msgstr "API-Fehler werden 2 Minuten lang zwischengespeichert, das API-Timeout wurde von 15 auf 5 Sekunden verkürzt."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Settings are removed from the database when the plugin is deleted."
+msgstr "Beim Löschen des Plugins werden die Einstellungen aus der Datenbank entfernt."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "All texts in the admin area and error messages are translatable."
+msgstr "Alle Texte im Adminbereich und alle Fehlermeldungen sind übersetzbar."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Prepared for the WordPress.org plugin directory: new name \"QSO Statistics for Wavelog\", readme.txt, complete plugin header."
+msgstr "Für das WordPress.org-Plugin-Verzeichnis vorbereitet: neuer Name „QSO Statistics for Wavelog“, readme.txt, vollständiger Plugin-Header."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "First release in the WordPress.org plugin directory. No functional changes."
+msgstr "Erste Veröffentlichung im WordPress.org-Plugin-Verzeichnis. Keine funktionalen Änderungen."
+
+msgid "German banner for the plugin page on de.wordpress.org. No functional changes."
+msgstr "Deutsches Banner für die Plugin-Seite auf de.wordpress.org. Keine funktionalen Änderungen."
+
+msgid "QSO statistics on a website, built with the shortcodes inside a block with groups."
+msgstr "QSO-Statistiken auf einer Website, umgesetzt mit den Shortcodes in einem Block mit Gruppen."
+
+msgid "The settings page: Wavelog URL, API key, station ID(s) and cache duration."
+msgstr "Die Einstellungsseite: Wavelog-URL, API-Schlüssel, Station-ID(s) und Cache-Dauer."
+
+msgid "The settings page can be found under Settings → Wavelog."
+msgstr "Die Einstellungsseite findest du unter Einstellungen → Wavelog."
+
+msgid "New icon, banner and screenshots for the WordPress.org plugin page. No functional changes."
+msgstr "Neues Icon, neues Banner und Screenshots für die Plugin-Seite auf WordPress.org. Keine funktionalen Änderungen."
