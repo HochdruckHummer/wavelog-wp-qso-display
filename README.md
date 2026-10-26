@@ -60,6 +60,12 @@ You can also use a block, with groups inside to achieve something like this:
 
 ## Changelog
 
+### 2.4.1
+
+- First release in the WordPress.org plugin directory: the plugin is now available at https://wordpress.org/plugins/qso-statistics-for-wavelog/ and can be updated directly from the WordPress admin.
+- The release workflow deploys to WordPress.org independently of the GitHub release, so a missing deployment can be caught up by re-running the workflow.
+- No functional changes.
+
 ### 2.4.0
 
 - Prepared for the WordPress.org plugin directory: new name "QSO Statistics for Wavelog", `readme.txt`, complete plugin header (license, requirements, text domain).
