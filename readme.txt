@@ -5,7 +5,7 @@ Tags: wavelog, ham radio, amateur radio, qso, shortcode
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -72,7 +72,16 @@ The data could not be retrieved. Log in as an administrator and open the page: y
 
 Create a read-only API key in Wavelog. The plugin only reads statistics.
 
+== Screenshots ==
+
+1. QSO statistics on a website, built with the shortcodes inside a block with groups.
+2. The settings page: Wavelog URL, API key, station ID(s) and cache duration.
+3. The settings page can be found under Settings → Wavelog.
+
 == Changelog ==
+
+= 2.4.2 =
+* New icon, banner and screenshots for the WordPress.org plugin page. No functional changes.
 
 = 2.4.1 =
 * First release in the WordPress.org plugin directory. No functional changes.

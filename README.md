@@ -60,6 +60,11 @@ You can also use a block, with groups inside to achieve something like this:
 
 ## Changelog
 
+### 2.4.2
+
+- New icon, banner and screenshots for the WordPress.org plugin page (folder `.wordpress-org`, deployed by the release workflow).
+- No functional changes.
+
 ### 2.4.1
 
 - First release in the WordPress.org plugin directory: the plugin is now available at https://wordpress.org/plugins/qso-statistics-for-wavelog/ and can be updated directly from the WordPress admin.
