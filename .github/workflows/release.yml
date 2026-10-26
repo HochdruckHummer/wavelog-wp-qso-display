@@ -2,8 +2,10 @@ name: Release
 
 # Creates a GitHub release with an installable plugin ZIP whenever main
 # contains a plugin version that has no release yet. If the secrets
-# SVN_USERNAME and SVN_PASSWORD are set, the version is also deployed to
-# the WordPress.org plugin directory.
+# SVN_USERNAME and SVN_PASSWORD are set and the version is not yet in the
+# WordPress.org plugin directory, it is deployed there as well. Both checks
+# are independent, so a missing deployment can be caught up by re-running
+# this workflow manually (Actions → Release → Run workflow).
 
 on:
   push:
@@ -36,18 +38,40 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "tag=v$version" >> "$GITHUB_OUTPUT"
 
-      - name: Check for existing release
-        id: exists
+      - name: Decide what to do
+        id: todo
         run: |
           if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
-            echo "Release ${{ steps.version.outputs.tag }} already exists, nothing to do."
-            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub release ${{ steps.version.outputs.tag }} already exists."
+            release=false
           else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
+            release=true
+          fi
+
+          deploy=false
+          if [ -z "$SVN_USERNAME" ] || [ -z "$SVN_PASSWORD" ]; then
+            echo "SVN secrets not set, skipping WordPress.org deployment."
+          else
+            status=$(curl -s -o /dev/null -w '%{http_code}' \
+              "https://plugins.svn.wordpress.org/$PLUGIN_SLUG/tags/${{ steps.version.outputs.version }}/")
+            case "$status" in
+              200) echo "Version ${{ steps.version.outputs.version }} is already on WordPress.org." ;;
+              404) deploy=true ;;
+              *)   echo "Unexpected HTTP status $status from WordPress.org SVN" >&2; exit 1 ;;
+            esac
+          fi
+
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
+          if [ "$release" = true ] || [ "$deploy" = true ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nothing to do."
+            echo "build=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up PHP
-        if: steps.exists.outputs.exists == 'false'
+        if: steps.todo.outputs.build == 'true'
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
@@ -55,13 +79,13 @@ jobs:
           coverage: none
 
       - name: Check PHP syntax
-        if: steps.exists.outputs.exists == 'false'
+        if: steps.todo.outputs.build == 'true'
         run: |
           find . -name '*.php' -not -path './vendor/*' -print0 \
             | xargs -0 -n1 php -l
 
       - name: Check readme.txt stable tag
-        if: steps.exists.outputs.exists == 'false'
+        if: steps.todo.outputs.build == 'true'
         run: |
           stable=$(grep -m1 -E '^Stable tag:' readme.txt | sed -E 's/^Stable tag:[[:space:]]*//' | tr -d '[:space:]')
           if [ "$stable" != "${{ steps.version.outputs.version }}" ]; then
@@ -70,7 +94,7 @@ jobs:
           fi
 
       - name: Extract changelog
-        if: steps.exists.outputs.exists == 'false'
+        if: steps.todo.outputs.release == 'true'
         run: |
           # Section "### <version>" in README.md up to the next heading
           awk -v v="${{ steps.version.outputs.version }}" '
@@ -84,14 +108,14 @@ jobs:
           fi
 
       - name: Build plugin ZIP
-        if: steps.exists.outputs.exists == 'false'
+        if: steps.todo.outputs.build == 'true'
         run: |
           mkdir -p "build/$PLUGIN_SLUG"
           cp -R wavelog-data-display.php uninstall.php readme.txt README.md LICENSE assets "build/$PLUGIN_SLUG/"
           (cd build && zip -r "../$PLUGIN_SLUG-${{ steps.version.outputs.version }}.zip" "$PLUGIN_SLUG")
 
       - name: Create release
-        if: steps.exists.outputs.exists == 'false'
+        if: steps.todo.outputs.release == 'true'
         run: |
           gh release create "${{ steps.version.outputs.tag }}" \
             "$PLUGIN_SLUG-${{ steps.version.outputs.version }}.zip" \
@@ -100,7 +124,7 @@ jobs:
             --notes-file release-notes.md
 
       - name: Deploy to WordPress.org
-        if: steps.exists.outputs.exists == 'false' && env.SVN_USERNAME != '' && env.SVN_PASSWORD != ''
+        if: steps.todo.outputs.deploy == 'true'
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:
           SLUG: ${{ env.PLUGIN_SLUG }}
