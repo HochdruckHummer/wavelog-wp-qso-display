@@ -223,6 +223,9 @@ msgstr "Für das WordPress.org-Plugin-Verzeichnis vorbereitet: neuer Name „QSO
 msgid "First release in the WordPress.org plugin directory. No functional changes."
 msgstr "Erste Veröffentlichung im WordPress.org-Plugin-Verzeichnis. Keine funktionalen Änderungen."
 
+msgid "Updated screenshot of the settings page. No functional changes."
+msgstr "Aktualisierter Screenshot der Einstellungsseite. Keine funktionalen Änderungen."
+
 msgid "German banner for the plugin page on de.wordpress.org. No functional changes."
 msgstr "Deutsches Banner für die Plugin-Seite auf de.wordpress.org. Keine funktionalen Änderungen."
 
