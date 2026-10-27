@@ -67,6 +67,12 @@ You can also use a block, with groups inside to achieve something like this:
 
 ## Changelog
 
+### 2.4.5
+
+- Source files for the plugin icon, the store banners and the BookStack covers in `design/`, with a render script (`design/render.sh`).
+- German translation files: two URLs kept unchanged, as required by translate.wordpress.org.
+- No functional changes.
+
 ### 2.4.4
 
 - Updated screenshot of the settings page for the WordPress.org plugin page (`.wordpress-org/screenshot-2.png`).

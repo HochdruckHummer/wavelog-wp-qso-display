@@ -3,7 +3,7 @@
 Plugin Name: QSO Statistics for Wavelog
 Plugin URI: https://github.com/HochdruckHummer/wavelog-wp-qso-display
 Description: Retrieves Wavelog data via dedicated Wavelog-Wordpress-API and displays the QSO numbers per QSO type via shortcodes. The Wavelog URL, the API key and the station ID(s) can be configured in the admin area. Station IDs can be comma-separated to aggregate multiple stations.
-Version: 2.4.4
+Version: 2.4.5
 Requires at least: 6.0
 Requires PHP: 8.2
 Author: Daniel Beckemeier, DL8YDP
