@@ -1,0 +1,74 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:#2a1b3d}svg{display:block}</style></head>
+<body>
+<svg id="s" xmlns="http://www.w3.org/2000/svg" width="880" height="500" viewBox="0 0 880 500"
+     font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4b2a75"/>
+      <stop offset="1" stop-color="#170e26"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity=".5"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="880" height="500" fill="url(#bg)"/>
+
+  <!-- pixel clock body -->
+  <g filter="url(#shadow)">
+    <rect x="300" y="60" width="520" height="160" rx="22" fill="#e9e6ef"/>
+    <rect x="318" y="78" width="484" height="124" rx="10" fill="#0b0b10"/>
+  </g>
+  <g id="matrix" filter="url(#glow)"></g>
+
+  <text x="60" y="320" fill="#fff" font-size="50" font-weight="700">WavelogQSOStats2Awtrix</text>
+  <text x="62" y="370" fill="#e3d6f5" font-size="24">QSO-Statistik aus Wavelog auf der Awtrix-Uhr</text>
+  <text x="62" y="410" fill="#bfa9de" font-size="21">Total · Jahr · SSB · CW · FT8 · Digi …</text>
+  <text x="62" y="455" fill="#9d86c2" font-size="20" letter-spacing="2">DL8YDP</text>
+</svg>
+<script>
+// 32x8 LED matrix: icon (8x8) + number in a 3x5 pixel font
+const font = {
+  '0':['111','101','101','101','111'], '1':['010','110','010','010','111'],
+  '2':['111','001','111','100','111'], '3':['111','001','111','001','111'],
+  '4':['101','101','111','001','001'], '5':['111','100','111','001','111'],
+  '6':['111','100','111','101','111'], '7':['111','001','010','010','010'],
+  '8':['111','101','111','101','111'], '9':['111','101','111','001','111']
+};
+// 8x8 icon: bar chart (green/yellow/red)
+const icon = [
+  '......rr',
+  '......rr',
+  '...yy.rr',
+  '...yy.rr',
+  'gg.yy.rr',
+  'gg.yy.rr',
+  'gg.yy.rr',
+  '........'
+];
+const cols = 32, rows = 8, x0 = 336, y0 = 84, step = 14, r = 5;
+const lit = {};
+icon.forEach((row, y) => [...row].forEach((c, x) => { if (c !== '.') lit[x + ',' + y] = {g: '#5cc78a', y: '#f2c84b', r: '#ef6b5e'}[c]; }));
+let x = 11;
+for (const d of '1366') {
+  font[d].forEach((row, y) => [...row].forEach((c, dx) => { if (c === '1') lit[(x + dx) + ',' + (y + 2)] = '#e2789d'; }));
+  x += 4;
+}
+// "QSO" underline bar
+for (let i = 11; i < 26; i++) lit[i + ',7'] = '#3b8fd9';
+const ns = 'http://www.w3.org/2000/svg', g = document.getElementById('matrix');
+for (let yy = 0; yy < rows; yy++) for (let xx = 0; xx < cols; xx++) {
+  const c = document.createElementNS(ns, 'circle');
+  c.setAttribute('cx', x0 + xx * step + step / 2);
+  c.setAttribute('cy', y0 + yy * step + step / 2);
+  c.setAttribute('r', r);
+  const col = lit[xx + ',' + yy];
+  c.setAttribute('fill', col || '#1c1c26');
+  g.appendChild(c);
+}
+</script>
+</body></html>

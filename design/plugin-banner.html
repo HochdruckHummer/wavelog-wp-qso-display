@@ -1,0 +1,69 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:#163d82}svg{display:block}</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1544" height="500" viewBox="0 0 1544 500"
+     font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f6fd0"/>
+      <stop offset="1" stop-color="#132f66"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1544" height="500" fill="url(#bg)"/>
+
+  <!-- radio waves behind the card -->
+  <g fill="none" stroke="#fff" stroke-width="3" opacity=".08">
+    <circle cx="1185" cy="250" r="330"/>
+    <circle cx="1185" cy="250" r="430"/>
+    <circle cx="1185" cy="250" r="530"/>
+    <circle cx="1185" cy="250" r="630"/>
+  </g>
+
+  <!-- small logo -->
+  <g transform="translate(80 62) scale(.42)">
+    <circle cx="128" cy="70" r="12" fill="#fff"/>
+    <g fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round">
+      <path d="M147.8 50.2 A28 28 0 0 1 147.8 89.8"/>
+      <path d="M108.2 50.2 A28 28 0 0 0 108.2 89.8"/>
+      <path d="M160.5 37.5 A46 46 0 0 1 160.5 102.5" opacity=".75"/>
+      <path d="M95.5 37.5 A46 46 0 0 0 95.5 102.5" opacity=".75"/>
+    </g>
+    <rect x="63" y="170" width="34" height="40" rx="6" fill="#5cc78a"/>
+    <rect x="111" y="148" width="34" height="62" rx="6" fill="#f2c84b"/>
+    <rect x="159" y="125" width="34" height="85" rx="6" fill="#ef6b5e"/>
+    <rect x="52" y="214" width="152" height="6" rx="3" fill="#fff" opacity=".85"/>
+  </g>
+
+  <!-- text (kept in the upper area, the bottom-left may be covered by the plugin title) -->
+  <text x="80" y="235" fill="#fff" font-size="62" font-weight="700">Your QSO counts,</text>
+  <text x="80" y="308" fill="#fff" font-size="62" font-weight="700">live on WordPress.</text>
+  <text x="82" y="362" fill="#cfe0ff" font-size="28">Total, per mode and this year — straight from Wavelog.</text>
+
+  <!-- stats card -->
+  <g filter="url(#shadow)">
+    <rect x="900" y="70" width="570" height="360" rx="22" fill="#fff"/>
+  </g>
+  <g text-anchor="middle">
+    <g font-size="24" fill="#555">
+      <text x="995" y="140">Total QSOs</text>
+      <text x="1185" y="140">SSB QSOs</text>
+      <text x="1375" y="140">FM QSOs</text>
+      <text x="995" y="310">FT8+FT4</text>
+      <text x="1185" y="310">RTTY QSOs</text>
+      <text x="1375" y="310">CW QSOs</text>
+    </g>
+    <g font-size="66" font-weight="400">
+      <text x="995" y="215" fill="#3b8fd9">2044</text>
+      <text x="1185" y="215" fill="#c0392b">374</text>
+      <text x="1375" y="215" fill="#3fb36f">86</text>
+      <text x="995" y="385" fill="#e2789d">1366</text>
+      <text x="1185" y="385" fill="#e0b21f">61</text>
+      <text x="1375" y="385" fill="#e07b39">71</text>
+    </g>
+  </g>
+  <line x1="930" y1="250" x2="1440" y2="250" stroke="#e6e9ef" stroke-width="2"/>
+</svg>
+</body></html>

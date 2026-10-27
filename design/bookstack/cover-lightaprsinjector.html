@@ -1,0 +1,69 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:#0f4a43}svg{display:block}</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="500" viewBox="0 0 880 500"
+     font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f8a78"/>
+      <stop offset="1" stop-color="#0b3a35"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="880" height="500" fill="url(#bg)"/>
+
+  <!-- map: contour lines -->
+  <g fill="none" stroke="#fff" stroke-width="2" opacity=".09">
+    <path d="M420 40 C520 10 640 60 720 40 S860 30 900 70"/>
+    <path d="M400 110 C500 80 620 140 720 110 S850 90 900 130"/>
+    <path d="M430 190 C540 160 640 220 740 190 S860 170 900 210"/>
+    <path d="M420 280 C520 250 650 310 750 280 S860 260 900 300"/>
+    <path d="M440 370 C540 340 660 400 760 370 S870 350 900 390"/>
+    <path d="M430 460 C530 430 650 490 750 460 S870 440 900 480"/>
+  </g>
+
+  <g transform="translate(80 10)">
+  <!-- track between objects -->
+  <path d="M520 330 C560 250 620 300 660 220 S740 170 770 120" fill="none" stroke="#f2c84b" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round" opacity=".9"/>
+
+  <!-- small markers -->
+  <g filter="url(#shadow)">
+    <circle cx="520" cy="330" r="16" fill="#fff"/>
+    <circle cx="520" cy="330" r="7" fill="#ef6b5e"/>
+    <circle cx="770" cy="120" r="16" fill="#fff"/>
+    <circle cx="770" cy="120" r="7" fill="#3b8fd9"/>
+  </g>
+
+  <!-- main pin with antenna -->
+  <g transform="translate(660 230)" filter="url(#shadow)">
+    <path d="M0 80 C-10 55 -52 30 -52 -8 A52 52 0 0 1 52 -8 C52 30 10 55 0 80 Z" fill="#fff"/>
+    <circle cx="0" cy="-10" r="30" fill="#1f8a78"/>
+    <!-- antenna + waves inside -->
+    <path d="M0 8 L0 -26" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="0" cy="-28" r="5" fill="#fff"/>
+    <g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round">
+      <path d="M11 -39 A16 16 0 0 1 11 -17"/>
+      <path d="M-11 -39 A16 16 0 0 0 -11 -17"/>
+    </g>
+  </g>
+  <!-- radio waves around pin -->
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="6" opacity=".55">
+    <path d="M735 150 A110 110 0 0 1 735 290"/>
+    <path d="M585 150 A110 110 0 0 0 585 290"/>
+  </g>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="6" opacity=".28">
+    <path d="M775 120 A160 160 0 0 1 775 320"/>
+    <path d="M545 120 A160 160 0 0 0 545 320"/>
+  </g>
+
+  </g>
+
+  <text x="60" y="110" fill="#bfeee5" font-size="22" letter-spacing="3">APRS</text>
+  <text x="60" y="300" fill="#fff" font-size="58" font-weight="700">lightAPRSinjector</text>
+  <text x="62" y="350" fill="#d4f4ee" font-size="24">Baken &amp; Objekte ins APRS-Netz</text>
+  <text x="62" y="390" fill="#9fdcd1" font-size="21">🌐 APRS-IS  ·  📻 Funk via Direwolf</text>
+  <text x="62" y="440" fill="#7cc7ba" font-size="20" letter-spacing="2">DL8YDP</text>
+</svg>
+</body></html>

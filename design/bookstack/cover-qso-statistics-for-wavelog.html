@@ -1,0 +1,68 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:#163d82}svg{display:block}</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="500" viewBox="0 0 880 500"
+     font-family="-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f6fd0"/>
+      <stop offset="1" stop-color="#132f66"/>
+    </linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="880" height="500" fill="url(#bg)"/>
+
+  <!-- radio waves behind the card -->
+  <g fill="none" stroke="#fff" stroke-width="3" opacity=".08">
+    <circle cx="660" cy="175" r="220"/>
+    <circle cx="660" cy="175" r="300"/>
+    <circle cx="660" cy="175" r="380"/>
+  </g>
+
+  <!-- logo -->
+  <g transform="translate(60 52) scale(.42)">
+    <circle cx="128" cy="70" r="12" fill="#fff"/>
+    <g fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round">
+      <path d="M147.8 50.2 A28 28 0 0 1 147.8 89.8"/>
+      <path d="M108.2 50.2 A28 28 0 0 0 108.2 89.8"/>
+      <path d="M160.5 37.5 A46 46 0 0 1 160.5 102.5" opacity=".75"/>
+      <path d="M95.5 37.5 A46 46 0 0 0 95.5 102.5" opacity=".75"/>
+    </g>
+    <rect x="63" y="170" width="34" height="40" rx="6" fill="#5cc78a"/>
+    <rect x="111" y="148" width="34" height="62" rx="6" fill="#f2c84b"/>
+    <rect x="159" y="125" width="34" height="85" rx="6" fill="#ef6b5e"/>
+    <rect x="52" y="214" width="152" height="6" rx="3" fill="#fff" opacity=".85"/>
+  </g>
+
+  <!-- stats card -->
+  <g filter="url(#shadow)">
+    <rect x="460" y="50" width="380" height="240" rx="18" fill="#fff"/>
+  </g>
+  <line x1="480" y1="170" x2="820" y2="170" stroke="#e6e9ef" stroke-width="2"/>
+  <g text-anchor="middle">
+    <g font-size="17" fill="#555">
+      <text x="523" y="95">Total QSOs</text>
+      <text x="650" y="95">SSB QSOs</text>
+      <text x="777" y="95">FM QSOs</text>
+      <text x="523" y="215">FT8+FT4</text>
+      <text x="650" y="215">RTTY QSOs</text>
+      <text x="777" y="215">CW QSOs</text>
+    </g>
+    <g font-size="44" font-weight="300">
+      <text x="523" y="148" fill="#3b8fd9">2044</text>
+      <text x="650" y="148" fill="#c0392b">374</text>
+      <text x="777" y="148" fill="#3fb36f">86</text>
+      <text x="523" y="268" fill="#e2789d">1366</text>
+      <text x="650" y="268" fill="#e0b21f">61</text>
+      <text x="777" y="268" fill="#e07b39">71</text>
+    </g>
+  </g>
+
+  <text x="60" y="300" fill="#fff" font-size="54" font-weight="700">QSO Statistics</text>
+  <text x="60" y="358" fill="#fff" font-size="54" font-weight="700">for Wavelog</text>
+  <text x="62" y="406" fill="#cfe0ff" font-size="24">Deine QSO-Zahlen, live auf WordPress</text>
+  <text x="62" y="450" fill="#9db8e8" font-size="20" letter-spacing="2">WORDPRESS-PLUGIN · DL8YDP</text>
+</svg>
+</body></html>

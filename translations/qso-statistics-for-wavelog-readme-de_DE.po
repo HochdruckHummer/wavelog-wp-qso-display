@@ -240,3 +240,6 @@ msgstr "Die Einstellungsseite findest du unter Einstellungen → Wavelog."
 
 msgid "New icon, banner and screenshots for the WordPress.org plugin page. No functional changes."
 msgstr "Neues Icon, neues Banner und Screenshots für die Plugin-Seite auf WordPress.org. Keine funktionalen Änderungen."
+
+msgid "Maintenance release: design source files and corrected German translations in the repository. No functional changes."
+msgstr "Wartungsversion: Quelldateien für Grafiken und korrigierte deutsche Übersetzungen im Repository. Keine funktionalen Änderungen."

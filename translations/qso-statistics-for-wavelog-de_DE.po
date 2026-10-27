@@ -67,7 +67,7 @@ msgstr "API-Schlüssel"
 
 #: wavelog-data-display.php:137
 msgid "Example: https://your-wavelog-instance.de"
-msgstr "Beispiel: https://deine-wavelog-instanz.de"
+msgstr "Beispiel: https://your-wavelog-instance.de"
 
 #: wavelog-data-display.php:134
 msgid "Wavelog URL"
@@ -131,7 +131,7 @@ msgstr "Einstellungen für QSO Statistics for Wavelog"
 
 #: wavelog-data-display.php:62
 msgid "The Wavelog URL must be a valid https:// URL."
-msgstr "Die Wavelog-URL muss eine gültige https://-URL sein."
+msgstr "Die Wavelog-URL muss eine gültige URL mit https:// sein."
 
 #. Author URI of the plugin
 #: wavelog-data-display.php
