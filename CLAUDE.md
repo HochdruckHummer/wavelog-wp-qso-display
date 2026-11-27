@@ -4,8 +4,8 @@ WordPress plugin that shows QSO statistics from a Wavelog instance via shortcode
 
 ## Requirements
 
-- Must run on PHP 8.2, 8.3 and 8.4 and on the current WordPress release. Avoid deprecated PHP features and WordPress functions.
-- The CI workflow (`.github/workflows/php-lint.yml`) runs `php -l` on all three PHP versions; keep it green.
+- Must run on PHP 8.2 to 8.6 and on the current WordPress release. Avoid deprecated PHP features and WordPress functions.
+- The CI workflow (`.github/workflows/php-lint.yml`) runs `php -l` on PHP 8.2, 8.3, 8.4, 8.5 and 8.6; keep it green.
 
 ## Security standards (WordPress)
 

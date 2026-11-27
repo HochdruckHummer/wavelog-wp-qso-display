@@ -3,9 +3,9 @@ Contributors: hochdruckhummer
 Donate link: https://paypal.me/DanielBeckemeier
 Tags: wavelog, ham radio, amateur radio, qso, shortcode
 Requires at least: 6.0
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.2
-Stable tag: 2.4.5
+Stable tag: 2.4.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -79,6 +79,9 @@ Create a read-only API key in Wavelog. The plugin only reads statistics.
 3. The settings page can be found under Settings → Wavelog.
 
 == Changelog ==
+
+= 2.4.6 =
+* Tested with WordPress 7.2. No functional changes.
 
 = 2.4.5 =
 * Maintenance release: design source files and corrected German translations in the repository. No functional changes.

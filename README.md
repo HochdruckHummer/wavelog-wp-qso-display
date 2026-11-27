@@ -67,6 +67,12 @@ You can also use a block, with groups inside to achieve something like this:
 
 ## Changelog
 
+### 2.4.6
+
+- Tested with WordPress 7.2 (RC2) and PHP 8.5: settings page, saving and sanitizing of settings, shortcodes and error handling work without notices.
+- The PHP syntax check now also runs on PHP 8.5 and 8.6.
+- No functional changes.
+
 ### 2.4.5
 
 - Source files for the plugin icon, the store banners and the BookStack covers in `design/`, with a render script (`design/render.sh`).

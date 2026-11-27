@@ -243,3 +243,6 @@ msgstr "Neues Icon, neues Banner und Screenshots für die Plugin-Seite auf WordP
 
 msgid "Maintenance release: design source files and corrected German translations in the repository. No functional changes."
 msgstr "Wartungsversion: Quelldateien für Grafiken und korrigierte deutsche Übersetzungen im Repository. Keine funktionalen Änderungen."
+
+msgid "Tested with WordPress 7.2. No functional changes."
+msgstr "Mit WordPress 7.2 getestet. Keine funktionalen Änderungen."
